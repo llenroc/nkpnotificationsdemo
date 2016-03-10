@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -7,6 +8,8 @@ using System.Web.Http.OData;
 using Microsoft.Azure.Mobile.Server;
 using Microsoft.Azure.Mobile.Server.Config;
 using Microsoft.Azure.NotificationHubs;
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Queue;
 using nkpnotificationsdemoService.DataObjects;
 using nkpnotificationsdemoService.Models;
 
@@ -45,6 +48,28 @@ namespace nkpnotificationsdemoService.Controllers
             TodoItem current = await InsertAsync(item);
 
             // Get the settings for the server project.
+            //await SendNotification(item);
+            await QueueNotification(item);
+
+            return CreatedAtRoute("Tables", new { id = current.Id }, current);
+        }
+
+        private async Task QueueNotification(TodoItem item)
+        {
+            var account = CloudStorageAccount.Parse(
+                ConfigurationManager.ConnectionStrings["StorageConnectionString"].ConnectionString);
+
+            var client = account.CreateCloudQueueClient();
+            var queue = client.GetQueueReference(ConfigurationManager.AppSettings["StorageQueueName"]);
+
+            await queue.CreateIfNotExistsAsync();
+
+            var message = new CloudQueueMessage(item.Text + " was added to the list.");
+            await queue.AddMessageAsync(message);
+        }
+
+        private async Task SendNotification(TodoItem item)
+        {
             HttpConfiguration config = this.Configuration;
             MobileAppSettingsDictionary settings =
                 this.Configuration.GetMobileAppSettingsProvider().GetMobileAppSettings();
@@ -77,8 +102,6 @@ namespace nkpnotificationsdemoService.Controllers
                 config.Services.GetTraceWriter()
                     .Error(ex.Message, null, "Push.SendAsync Error");
             }
-
-            return CreatedAtRoute("Tables", new { id = current.Id }, current);
         }
 
         // DELETE tables/TodoItem/48D68C86-6EA6-4C25-AA33-223FC9A27959

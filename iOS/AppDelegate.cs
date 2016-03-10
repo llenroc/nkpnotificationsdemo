@@ -1,22 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
 using Foundation;
-using Microsoft.WindowsAzure.MobileServices;
-using Newtonsoft.Json.Linq;
 using UIKit;
 
 namespace nkpnotificationsdemo.iOS
 {
-	[Register ("AppDelegate")]
+    [Register ("AppDelegate")]
 	public partial class AppDelegate : global::Xamarin.Forms.Platform.iOS.FormsApplicationDelegate
 	{
+        private NotificationsClient Notifications;
+
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
             global::Xamarin.Forms.Forms.Init();
 
-            Microsoft.WindowsAzure.MobileServices.CurrentPlatform.Init();
+            //Microsoft.WindowsAzure.MobileServices.CurrentPlatform.Init();
+
+            Notifications = new NotificationsClient();
 
             // IMPORTANT: uncomment this code to enable sync on Xamarin.iOS
             // For more information, see: http://go.microsoft.com/fwlink/?LinkId=620342
@@ -37,19 +36,30 @@ namespace nkpnotificationsdemo.iOS
             return base.FinishedLaunching(app, options);
         }
 
-        public override void RegisteredForRemoteNotifications(UIApplication application, NSData deviceToken)
+        public override async void RegisteredForRemoteNotifications(UIApplication application, NSData deviceToken)
         {
-            const string templateBodyAPNS = "{\"aps\":{\"alert\":\"$(messageParam)\"}}";
+            await Notifications.RegisterAsync(GetDeviceToken(deviceToken), "apns", tags: new string[0]);
 
-            JObject templates = new JObject();
-            templates["genericMessage"] = new JObject
-            {
-              {"body", templateBodyAPNS}
-            };
+            //const string templateBodyAPNS = "{\"aps\":{\"alert\":\"$(messageParam)\"}}";
 
-            // Register for push with your mobile app
-            Push push = TodoItemManager.DefaultManager.CurrentClient.GetPush();
-            push.RegisterAsync(deviceToken, templates);
+            //JObject templates = new JObject();
+            //templates["genericMessage"] = new JObject
+            //{
+            //  {"body", templateBodyAPNS}
+            //};
+
+            //// Register for push with your mobile app
+            //Push push = TodoItemManager.DefaultManager.CurrentClient.GetPush();
+            //push.RegisterAsync(deviceToken, templates);
+        }
+
+        private string GetDeviceToken(NSData deviceToken)
+        {
+            var token = deviceToken.Description;
+            if (!string.IsNullOrWhiteSpace(token))
+                token = token.Trim('<').Trim('>');
+
+            return token;
         }
 
         public override void DidReceiveRemoteNotification(UIApplication application, NSDictionary userInfo, Action<UIBackgroundFetchResult> completionHandler)

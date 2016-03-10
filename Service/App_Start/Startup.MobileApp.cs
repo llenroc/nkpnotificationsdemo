@@ -45,6 +45,13 @@ namespace nkpnotificationsdemoService
                     TokenHandler = config.GetAppServiceTokenHandler()
                 });
             }
+
+            config.Routes.MapHttpRoute(
+                name: "API Default",
+                routeTemplate: "api/{controller}/{id}",
+                defaults: new { id = RouteParameter.Optional }
+            );
+
             app.UseWebApi(config);
         }
     }
