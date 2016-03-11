@@ -12,14 +12,8 @@ namespace nkpnotificationsdemo.iOS
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
             global::Xamarin.Forms.Forms.Init();
-
-            //Microsoft.WindowsAzure.MobileServices.CurrentPlatform.Init();
-
+            
             Notifications = new NotificationsClient();
-
-            // IMPORTANT: uncomment this code to enable sync on Xamarin.iOS
-            // For more information, see: http://go.microsoft.com/fwlink/?LinkId=620342
-            //SQLitePCL.CurrentPlatform.Init();
 
             // registers for push for iOS8
             var settings = UIUserNotificationSettings.GetSettingsForTypes(
@@ -39,18 +33,6 @@ namespace nkpnotificationsdemo.iOS
         public override async void RegisteredForRemoteNotifications(UIApplication application, NSData deviceToken)
         {
             await Notifications.RegisterAsync(GetDeviceToken(deviceToken), "apns", tags: new string[0]);
-
-            //const string templateBodyAPNS = "{\"aps\":{\"alert\":\"$(messageParam)\"}}";
-
-            //JObject templates = new JObject();
-            //templates["genericMessage"] = new JObject
-            //{
-            //  {"body", templateBodyAPNS}
-            //};
-
-            //// Register for push with your mobile app
-            //Push push = TodoItemManager.DefaultManager.CurrentClient.GetPush();
-            //push.RegisterAsync(deviceToken, templates);
         }
 
         private string GetDeviceToken(NSData deviceToken)

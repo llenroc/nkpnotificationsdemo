@@ -1,0 +1,202 @@
+﻿{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "autoscalesettings_nkpnotificationsdemo_nkpnotificationsdemo_East_US_name": {
+        "type": "string",
+        "defaultValue": "nkpnotificationsdemo-nkpnotificationsdemo-East US"
+      },
+        "components_nkpnotificationsdemo_east_us_name": {
+            "type": "string",
+            "defaultValue": "nkpnotificationsdemo-east us"
+        },
+        "namespaces_nkpnotificationsdemo_ns_name": {
+            "type": "string",
+            "defaultValue": "nkpnotificationsdemo-ns"
+        },
+        "notificationHubs_nkpnotificationsdemo_name": {
+            "type": "string",
+            "defaultValue": "nkpnotificationsdemo"
+        },
+        "storageAccounts_nkpnotificationsdemo_name": {
+            "type": "string",
+            "defaultValue": "nkpnotificationsdemo"
+        },
+        "serverFarms_nkpnotificationsdemo_name": {
+            "type": "string",
+            "defaultValue": "nkpnotificationsdemo"
+        },
+        "sites_nkpnotificationsdemo_name": {
+            "type": "string",
+            "defaultValue": "nkpnotificationsdemo"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "comments": "Generalized from resource: /subscriptions/402f66ca-91ab-452b-a436-52cf0dce9bf0/resourceGroups/nkpnotificationsdemo/providers/microsoft.insights/autoscalesettings/nkpnotificationsdemo-nkpnotificationsdemo-East US",
+            "type": "microsoft.insights/autoscalesettings",
+            "name": "[parameters('autoscalesettings_nkpnotificationsdemo_nkpnotificationsdemo_East_US_name')]",
+            "apiVersion": "2015-04-01",
+            "location": "East US",
+            "properties": {
+                "profiles": [
+                    {
+                        "name": "Default",
+                        "capacity": {
+                            "minimum": "1",
+                            "maximum": "1",
+                            "default": "1"
+                        },
+                        "rules": [
+                            {
+                                "metricTrigger": {
+                                    "metricName": "CpuPercentage",
+                                    "metricNamespace": "",
+                                    "metricResourceUri": "[resourceId('Microsoft.Web/serverFarms', parameters('serverFarms_nkpnotificationsdemo_name'))]",
+                                    "timeGrain": "PT1M",
+                                    "statistic": "Average",
+                                    "timeWindow": "PT10M",
+                                    "timeAggregation": "Average",
+                                    "operator": "GreaterThan",
+                                    "threshold": 80
+                                },
+                                "scaleAction": {
+                                    "direction": "Increase",
+                                    "type": "ChangeCount",
+                                    "value": "1",
+                                    "cooldown": "PT10M"
+                                }
+                            },
+                            {
+                                "metricTrigger": {
+                                    "metricName": "CpuPercentage",
+                                    "metricNamespace": "",
+                                    "metricResourceUri": "[resourceId('Microsoft.Web/serverFarms', parameters('serverFarms_nkpnotificationsdemo_name'))]",
+                                    "timeGrain": "PT1M",
+                                    "statistic": "Average",
+                                    "timeWindow": "PT1H",
+                                    "timeAggregation": "Average",
+                                    "operator": "LessThan",
+                                    "threshold": 60
+                                },
+                                "scaleAction": {
+                                    "direction": "Decrease",
+                                    "type": "ChangeCount",
+                                    "value": "1",
+                                    "cooldown": "PT1H"
+                                }
+                            }
+                        ]
+                    }
+                ],
+                "enabled": true,
+                "name": "[parameters('autoscalesettings_nkpnotificationsdemo_nkpnotificationsdemo_East_US_name')]",
+                "targetResourceUri": "[resourceId('Microsoft.Web/serverFarms', parameters('serverFarms_nkpnotificationsdemo_name'))]"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverFarms', parameters('serverFarms_nkpnotificationsdemo_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: /subscriptions/402f66ca-91ab-452b-a436-52cf0dce9bf0/resourceGroups/nkpnotificationsdemo/providers/microsoft.insights/components/nkpnotificationsdemo-East US",
+            "type": "microsoft.insights/components",
+            "kind": "web",
+            "name": "[parameters('components_nkpnotificationsdemo_east_us_name')]",
+            "apiVersion": "2015-05-01",
+            "location": "Central US",
+            "properties": {
+                "ApplicationId": "[parameters('components_nkpnotificationsdemo_east_us_name')]"
+            }
+        },
+        {
+            "comments": "Generalized from resource: /subscriptions/402f66ca-91ab-452b-a436-52cf0dce9bf0/resourceGroups/nkpnotificationsdemo/providers/Microsoft.NotificationHubs/namespaces/nkpnotificationsdemo-ns",
+            "type": "Microsoft.NotificationHubs/namespaces",
+            "kind": "NotificationHub",
+            "name": "[parameters('namespaces_nkpnotificationsdemo_ns_name')]",
+            "apiVersion": "2014-09-01",
+            "location": "East US",
+            "properties": {
+                "namespaceType": "NotificationHub"
+            }
+        },
+        {
+            "comments": "Generalized from resource: /subscriptions/402f66ca-91ab-452b-a436-52cf0dce9bf0/resourceGroups/nkpnotificationsdemo/providers/Microsoft.NotificationHubs/namespaces/nkpnotificationsdemo-ns/notificationHubs/nkpnotificationsdemo",
+            "type": "Microsoft.NotificationHubs/namespaces/notificationHubs",
+            "name": "[parameters('notificationHubs_nkpnotificationsdemo_name')]",
+            "apiVersion": "2014-09-01",
+            "location": "East US",
+            "properties": {
+                "authorizationRules": []
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.NotificationHubs/namespaces', parameters('namespaces_nkpnotificationsdemo_ns_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: /subscriptions/402f66ca-91ab-452b-a436-52cf0dce9bf0/resourceGroups/nkpnotificationsdemo/providers/Microsoft.Storage/storageAccounts/nkpnotificationsdemo",
+            "type": "Microsoft.Storage/storageAccounts",
+            "name": "[parameters('storageAccounts_nkpnotificationsdemo_name')]",
+            "apiVersion": "2015-06-15",
+            "location": "eastus",
+            "properties": {
+                "accountType": "Standard_RAGRS"
+            }
+        },
+        {
+            "comments": "Generalized from resource: /subscriptions/402f66ca-91ab-452b-a436-52cf0dce9bf0/resourceGroups/nkpnotificationsdemo/providers/Microsoft.Web/serverFarms/nkpnotificationsdemo",
+            "type": "Microsoft.Web/serverFarms",
+            "sku": {
+                "name": "S1",
+                "tier": "Standard",
+                "size": "S1",
+                "family": "S",
+                "capacity": 1
+            },
+            "kind": "",
+            "name": "[parameters('serverFarms_nkpnotificationsdemo_name')]",
+            "apiVersion": "2015-08-01",
+            "location": "East US",
+            "properties": {
+                "name": "[parameters('serverFarms_nkpnotificationsdemo_name')]",
+                "numberOfWorkers": 1
+            }
+        },
+        {
+            "comments": "Generalized from resource: /subscriptions/402f66ca-91ab-452b-a436-52cf0dce9bf0/resourceGroups/nkpnotificationsdemo/providers/Microsoft.Web/sites/nkpnotificationsdemo",
+            "type": "Microsoft.Web/sites",
+            "kind": "mobileapp",
+            "name": "[parameters('sites_nkpnotificationsdemo_name')]",
+            "apiVersion": "2015-08-01-preview",
+            "location": "East US",
+            "properties": {
+                "name": "[parameters('sites_nkpnotificationsdemo_name')]",
+                "hostNames": [
+                    "[concat(parameters('sites_nkpnotificationsdemo_name'),'.azurewebsites.net')]"
+                ],
+                "enabledHostNames": [
+                    "[concat(parameters('sites_nkpnotificationsdemo_name'),'.azurewebsites.net')]",
+                    "[concat(parameters('sites_nkpnotificationsdemo_name'),'.scm.azurewebsites.net')]"
+                ],
+                "hostNameSslStates": [
+                    {
+                        "name": "[concat(parameters('sites_nkpnotificationsdemo_name'),'.azurewebsites.net')]",
+                        "sslState": 0,
+                        "thumbprint": null,
+                        "ipBasedSslState": 0
+                    },
+                    {
+                        "name": "[concat(parameters('sites_nkpnotificationsdemo_name'),'.scm.azurewebsites.net')]",
+                        "sslState": 0,
+                        "thumbprint": null,
+                        "ipBasedSslState": 0
+                    }
+                ],
+                "serverFarmId": "[resourceId('Microsoft.Web/serverFarms', parameters('serverFarms_nkpnotificationsdemo_name'))]"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverFarms', parameters('serverFarms_nkpnotificationsdemo_name'))]"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,27 @@
+﻿{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+  "parameters": {
+    "autoscalesettings_nkpnotificationsdemo_nkpnotificationsdemo_East_US_name": {
+      "value": null
+    },
+    "components_nkpnotificationsdemo_east_us_name": {
+      "value": null
+    },
+    "namespaces_nkpnotificationsdemo_ns_name": {
+      "value": null
+    },
+    "notificationHubs_nkpnotificationsdemo_name": {
+      "value": null
+    },
+    "storageAccounts_nkpnotificationsdemo_name": {
+      "value": null
+    },
+    "serverFarms_nkpnotificationsdemo_name": {
+      "value": null
+    },
+    "sites_nkpnotificationsdemo_name": {
+      "value": null
+    }
+  }
+}
