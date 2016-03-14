@@ -12,7 +12,7 @@ namespace nkpnotificationsdemo.iOS
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
             global::Xamarin.Forms.Forms.Init();
-            
+            Microsoft.WindowsAzure.MobileServices.CurrentPlatform.Init();
             Notifications = new NotificationsClient();
 
             // registers for push for iOS8
@@ -39,7 +39,7 @@ namespace nkpnotificationsdemo.iOS
         {
             var token = deviceToken.Description;
             if (!string.IsNullOrWhiteSpace(token))
-                token = token.Trim('<').Trim('>');
+                token = token.Trim('<').Trim('>').Replace(" ", "");
 
             return token;
         }

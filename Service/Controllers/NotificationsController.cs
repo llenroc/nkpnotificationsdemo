@@ -35,7 +35,7 @@ namespace nkpnotificationsdemoService.Controllers
 
         // PUT api/register/5
         // This creates or updates a registration (with provided PNS handle) at the specified id
-        public async void Put(string id, DeviceRegistration deviceUpdate)
+        public async Task<IHttpActionResult> Put(string id, DeviceRegistration deviceUpdate)
         {
             // IMPORTANT: add logic to make sure that caller is allowed to register for the provided tags
 
@@ -59,7 +59,9 @@ namespace nkpnotificationsdemoService.Controllers
             }
 
             registration.RegistrationId = id;
-            registration.Tags = new HashSet<string>(deviceUpdate.Tags);
+
+            if (deviceUpdate.Tags != null)
+                registration.Tags = new HashSet<string>(deviceUpdate.Tags);
 
             try
             {
@@ -69,6 +71,8 @@ namespace nkpnotificationsdemoService.Controllers
             {
                 ReturnGoneIfHubResponseIsGone(e);
             }
+
+            return Ok();
         }
 
         // DELETE api/register/5
